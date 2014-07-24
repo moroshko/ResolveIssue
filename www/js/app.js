@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $ionicLoading) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,6 +17,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    $ionicLoading.show({
+      template: 'Hello'
+    });
+
+    $rootScope.$on('$stateChangeError', function() {
+      $ionicLoading.show({
+        template: 'All good!'
+      });
+    });
   });
 })
 
@@ -52,6 +62,14 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       views: {
         'menuContent' :{
           templateUrl: "templates/playlists.html",
+          resolve: {
+            issue: function($q, $timeout) {
+              var defer = $q.defer();
+              //defer.reject();       // Doesn't work
+              $timeout(defer.reject); // Works in browser, but not device
+              return defer.promise;
+            }
+          },
           controller: 'PlaylistsCtrl'
         }
       }
