@@ -65,7 +65,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           resolve: {
             issue: function($q, $timeout) {
               var defer = $q.defer();
-              //defer.reject();       // Doesn't work
+              //defer.reject();       // Doesn't work browser or device
               $timeout(defer.reject); // Works in browser, but not device
               return defer.promise;
             }
